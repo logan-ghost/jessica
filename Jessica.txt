@@ -1,0 +1,44 @@
+package meuPacote;
+
+import robocode.*;
+
+import java.awt.*;
+
+public class Jessica extends AdvancedRobot {
+    
+    boolean movimentoReverso = false; // Variável para alternar entre movimento para frente e para trás
+    
+    public void run() {
+        setColors(Color.purple, Color.purple, Color.purple); // Define as cores do corpo, arma e radar do robô como roxo
+        setBulletColor(Color.purple); // Define a cor das balas do robô como roxo
+        setAdjustGunForRobotTurn(true); // Permite ajustar a mira da arma enquanto o robô gira
+        
+        while (true) {
+            movimentoAgressivo(); // Executa a estratégia de movimento agressivo
+        }
+    }
+    
+    public void onScannedRobot(ScannedRobotEvent e) {
+        double distancia = e.getDistance(); // Obtém a distância para o robô escaneado
+        
+        if (distancia < 200) {
+            fire(3); // Dispara com força máxima se o robô estiver próximo
+        } else {
+            fire(1); // Dispara com força mínima se o robô estiver distante
+        }
+    }
+    
+    public void onHitWall(HitWallEvent e) {
+        movimentoReverso = !movimentoReverso; // Alterna entre movimento para frente e para trás ao atingir uma parede
+    }
+    
+    public void movimentoAgressivo() {
+        if (!movimentoReverso) {
+            setAhead(100); // Move para frente
+        } else {
+            setBack(100); // Move para trás
+        }
+        turnGunRight(360); // Gira a arma em círculos
+        execute(); // Executa os comandos definidos
+    }
+}
